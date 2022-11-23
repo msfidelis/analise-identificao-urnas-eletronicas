@@ -1,0 +1,26 @@
+{
+    "id": "D0CBB089",
+    "path": "~/Workspace/urna-id/analise-geral.R",
+    "project_path": "analise-geral.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1669240884228.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "218,0",
+        "scrollLine": "192"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1669241172,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1669241172195,
+    "read_only": false,
+    "read_only_alternatives": []
+}
