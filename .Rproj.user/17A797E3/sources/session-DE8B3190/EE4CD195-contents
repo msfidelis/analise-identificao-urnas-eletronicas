@@ -28,6 +28,8 @@ logs_amostra <- read.table("logd-00407-0008.dat",
 ## Prova de conceito da geração de Hash de identificação
 logs_amostra$V5
 
+view(logs_amostra)
+
 codigo_urna <- logs_amostra$V3[1]
 codigo_urna
 
