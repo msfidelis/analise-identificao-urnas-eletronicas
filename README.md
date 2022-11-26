@@ -2,6 +2,7 @@
 # Sumário
 
 * [Introdução](#introdução)
+    * [IMPORTANTE](#importante)
 * [Objetivo](#objetivo)
 * [Dados utilizados](#dados-utilizados)
 * [Problema apresentado no relatório](#problema-apresentado-no-relatório)
@@ -25,7 +26,8 @@ A partir das constantes ações do **Partido Livre (PL)**, liderado  atualmente 
 
 Será apresentado uma prova de conceito afim de criar um hash único de trabalho das urnas para identificá-las e diferenciá-las nas análises de logs para auditoria unitária ou em massa, e também correlacionar as mesmas em outros datasets e boletins públicos. 
 
-Importante ressaltar que essa análise e proposta de auditoria e identificação de urnas, é feita inicialmente por um civil, por vontade própria, livre que qualquer financiamento de qualquer grupo ou partido político. Afins de estabelecer modelos técnicos para auditoria de dados e resultados. 
+## IMPORTANTE
+Essa análise, proposta de auditoria e identificação de urnas, é feita inicialmente por um civil, por vontade própria, livre que qualquer financiamento de qualquer grupo ou partido político. Afins de estabelecer modelos técnicos para auditoria de dados e resultados eleitorais de forma otimizada e segura. 
 
 # Objetivo
 
