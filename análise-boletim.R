@@ -58,8 +58,12 @@ boletim_salto_sp
 ## Verificando a sessão 0004 de Salto
 View(subset(boletim_salto_sp, HASH_IDENTIFICACAO == "96316cbb4150ba996f2bab85c46d537c"))
 
+## Gerando um dataset com a sumarização de votos
+
 
 View(boletim)
+
+View(logs[])
 
 
 

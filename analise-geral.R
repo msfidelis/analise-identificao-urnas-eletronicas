@@ -38,15 +38,30 @@ datasets_logs <- c(
   "logd-00407-0253.dat"
 )
 
-## Criando um Dummy Dataset vazio
-logs <- datasets_logs[1]
+## Abrindo o arquivo inicial para efetuar análise 
 logs <- read.table(datasets_logs[1], 
-                  header=FALSE, 
-                  skip=0, 
-                  sep="\t", 
-                  nrows = 1,
-                  fileEncoding="iso-8859-1"
+                   header=FALSE, 
+                   skip=0, 
+                   sep="\t", 
+                   nrows = 100,
+                   fileEncoding="iso-8859-1"
 )
+
+View(logs)
+
+initial_table <- table(logs$v3)
+initial_table
+
+
+# Criando um Dummy Dataframe para iniciar o merge dos datasets
+logs <- read.table(datasets_logs[1], 
+                   header=FALSE, 
+                   skip=0, 
+                   sep="\t", 
+                   nrows = 1,
+                   fileEncoding="iso-8859-1"
+)
+
 
 logs$modelo_urna <- ""
 logs$municipio <- ""
@@ -63,10 +78,10 @@ logs
 ## Fazendo o merge de todos os datasets
 for (d in datasets_logs) {
   tmp <- read.table(d, 
-          header=FALSE, 
-          skip=0, 
-          sep="\t", 
-          fileEncoding="iso-8859-1"
+                    header=FALSE, 
+                    skip=0, 
+                    sep="\t", 
+                    fileEncoding="iso-8859-1"
   )
   names(tmp) <- c("datetime", "log_level", "id_urna", "cod", "log", "log_id")
   
@@ -103,8 +118,66 @@ View(logs)
 table(logs$modelo_urna)
 table(logs$zona_eleitoral)
 table(logs$secao_eleitoral)
+table(logs$municipio)
 table(logs$local_votacao)
 table(logs$id_urna)
+
+
+
+# Análise Visual Logs da Seção Eleitoral
+
+ini_secao_eleitoral_freq <- as.data.frame(table(logs$secao_eleitoral))
+
+ggplot(ini_secao_eleitoral_freq, aes(x=Var1, y=Freq)) + 
+  geom_bar(stat='identity', aes(fill=Var1)) +
+  ggtitle("Quantidade de Logs por Seção Eleitoral - Zona 0221 Municipio 70050") +
+  labs(x = "Seção Eleitoral", y = "Logs", fill = "Seção") +
+  geom_text(aes(label=Freq)) +
+  scale_color_discrete("Seção:")  
+
+
+# Análise Visual Logs dos Modelo de Urna
+
+ini_modelo_freq <- as.data.frame(table(logs$modelo_urna))
+
+ggplot(ini_modelo_freq, aes(x=Var1, y=Freq)) + 
+  geom_bar(stat='identity', aes(fill=Var1)) +
+  ggtitle("Quantidade de Logs por Modelo de Urna - Zona 0221 Municipio 70050") +
+  labs(x = "Modelo", y = "Logs", fill = "Modelo") +
+  geom_text(aes(label=Freq)) +
+  scale_color_discrete("Modelos:")  
+
+# Análise Visual - Quantidade de Urnas de Diferentes Modelos da Amostra
+
+unique_modelos <- logs %>% distinct(secao_eleitoral, zona_eleitoral, modelo_urna)
+unique_modelos <- as.data.frame(unique_modelos)
+unique_modelos
+
+unique_modelos_freq <- table(unique_modelos$modelo_urna)
+unique_modelos_freq <- as.data.frame(unique_modelos_freq)
+unique_modelos_freq
+
+ggplot(unique_modelos_freq, aes(x=Var1, y=Freq)) + 
+  geom_bar(stat='identity', aes(fill=Var1)) +
+  ggtitle("Quantidade de Modelos de Urna da Amostra - Municipio 70050") +
+  labs(x = "Modelo", y = "Logs", fill = "Modelo") +
+  geom_text(aes(label=Freq)) +
+  scale_color_discrete("Modelos:") 
+
+unique_modelos_freq$percent = round(
+  100 * unique_modelos_freq$Freq / sum(unique_modelos_freq$Freq),
+  digits = 0
+)
+
+ggplot(unique_modelos_freq, aes(x="", y=Freq, fill=Var1)) + 
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  geom_text(aes(label = Freq), position = position_stack(vjust = 0.5)) +
+  labs(x = NULL, y = NULL, fill = NULL, title = "Quantidade de Modelos de Urna da Amostra - Municipio 70050") + 
+  theme_classic() + theme(axis.line = element_blank(),
+                          axis.text = element_blank(),
+                          axis.ticks = element_blank(),
+                          plot.title = element_text(hjust = 0.5, color = "#666666"))
 
 # Análise Visual da tabela de frequencia dos id_urna 
 
@@ -133,29 +206,6 @@ ggplot(freq_table_modelo, aes(x=modelo_urna, y=frequencia)) +
   geom_text(aes(label=frequencia)) +
   scale_color_discrete("Modelos:")  
 
-
-## Gerando uma seed para vincular ao Boletim das Urnas 
-## Gerado com as informações que tem lá para cruzamento dos dados
-
-logs$boletim_seed <- paste(
-  logs$municipio,
-  logs$zona_eleitoral,
-  logs$local_votacao,
-  logs$secao_eleitoral,
-  sep = "-")
-
-
-## Gerando um hash de identificação
-logs$hash_identificacao_boletim <- sapply(logs$boletim_seed, digest, algo="md5")
-
-table(logs$id_urna)
-sort(table(logs$boletim_seed))
-sort(table(logs$hash_identificacao_boletim))
-
-table(logs$hash_identificacao_boletim)
-
-View(logs)
-
 ## Gerando uma seed para vincular a auditoria das urnas
 logs$urna_seed <- paste(
   logs$municipio,
@@ -168,15 +218,26 @@ logs$urna_seed <- paste(
 
 logs$hash_urna <- sapply(logs$urna_seed, digest, algo="md5")
 
-logs$urna_seed
-logs$hash_identificacao_boletim
-
-View(logs)
-
-## Tabela de frequencias
 sort(table(logs$urna_seed))
+sort(table(logs$hash_urna))
 
-freq_table_hash <- table(logs$hash_urna)
+
+## Tabela de frequencias id_urna
+freq_table_id <- sort(table(logs$id_urna))
+freq_table_id <- as.data.frame(freq_table_id)
+names(freq_table_id) <- c("id_urna", "frequencia")
+freq_table_id
+
+ggplot(freq_table_id, aes(y=id_urna, x=frequencia)) + 
+  geom_bar(stat='identity', aes(fill=id_urna)) +
+  ggtitle("Quantidade de Logs por Urna Eletrônica") +
+  labs(x = "Quantidade de Logs", y = "Identificador id_urna", fill = "ID de Urna:") +
+  geom_text(aes(label=frequencia)) +
+  scale_color_discrete("Modelos:")  
+
+
+## Tabela de frequencias hash_urna
+freq_table_hash <- sort(table(logs$hash_urna))
 freq_table_hash <- as.data.frame(freq_table_hash)
 names(freq_table_hash) <- c("identificado_urna", "frequencia")
 freq_table_hash
@@ -184,17 +245,31 @@ freq_table_hash
 ggplot(freq_table_hash, aes(y=identificado_urna, x=frequencia)) + 
   geom_bar(stat='identity', aes(fill=identificado_urna)) +
   ggtitle("Quantidade de Logs por Urna Eletrônica") +
-  labs(x = "Quantidade de Logs", y = "Identificador Hash Urna", fill = "Hash de Urna:") +
+  labs(x = "Quantidade de Logs", y = "Identificador Hash Urna", fill = "Hash-id de Urna:") +
   geom_text(aes(label=frequencia)) +
   scale_color_discrete("Modelos:")  
+
+sum(freq_table_hash$frequencia)
+
+## "Me diga qual urna estava na seção X do local Y da zona Z"
+
+urna_x <- subset(logs, secao_eleitoral == "0001" | local_votacao == "1015" | zona_eleitoral == "0221")
+urna_x_view <- urna_x %>% select(hash_urna,datetime, modelo_urna, municipio, zona_eleitoral, secao_eleitoral)
+
+View(head(urna_x_view, 1))
+
+## "Me dê somente os logs da urna hash_id:1a2097e964d5e77e355e30744484aa2c"
+
+urna_x <- subset(logs, hash_urna == "1a2097e964d5e77e355e30744484aa2c")
+urna_x_view <- urna_x %>% select(hash_urna,datetime, modelo_urna, municipio, zona_eleitoral, secao_eleitoral,  log)
+
+View(urna_x_view)
 
 ## Prova real dos hashes de identificao vs id da urna repetido nos modelos > 2020
 
 ### Codigo das urnas apontado como erro
 codigo_urna_analise <- 67305985
 urnas_analise <- subset(logs, id_urna == codigo_urna_analise)
-
-View(urnas_analise)
 
 ### Tabela de frequencias id_urna
 table(urnas_analise$id_urna)
@@ -255,6 +330,26 @@ colnames(boletim)
 boletim_salto_sp <- subset(boletim, CD_MUNICIPIO == 70050)
 boletim_salto_sp
 
+## Gerando uma seed para vincular ao Boletim das Urnas 
+## Gerado com as informações que tem lá para cruzamento dos dados
+
+logs$boletim_seed <- paste(
+  logs$municipio,
+  logs$zona_eleitoral,
+  logs$local_votacao,
+  logs$secao_eleitoral,
+  sep = "-")
+
+
+## Gerando um hash de identificação do Boletim
+logs$hash_identificacao_boletim <- sapply(logs$boletim_seed, digest, algo="md5")
+
+table(logs$id_urna)
+sort(table(logs$boletim_seed))
+sort(table(logs$hash_identificacao_boletim))
+
+table(logs$hash_identificacao_boletim)
+
 ## Gerando a seed de identificação com as mesmas informações que temos no log
 ## das urnas para fazer o merge
 
@@ -292,18 +387,28 @@ unique_hashes
 
 # Adicionando as informações da urna no boletim com base no HASH_IDENTIFICAO
 
-# Adiciona o HASH_URNA
+# Adiciona o HASH_URNA e MODELO URNA
 for (i in 1:nrow(unique_hashes)) {
   h <- unique_hashes[i, "hash_identificacao_boletim"]
   boletim_salto_sp$HASH_URNA[boletim_salto_sp$HASH_IDENTIFICACAO == h] <- unique_hashes[i, "hash_urna"]
+  boletim_salto_sp$MODELO_URNA[boletim_salto_sp$HASH_IDENTIFICACAO == h] <- unique_hashes[i, "modelo_urna"] 
 }
 
-# Adiciona o Modelo da Urna no Boletim
-for (i in 1:nrow(unique_hashes)) {
-  h <- unique_hashes[i, "hash_identificacao_boletim"]
-  boletim_salto_sp$MODELO_URNA[boletim_salto_sp$HASH_IDENTIFICACAO == h] <- unique_hashes[i, "modelo_urna"]   
-}
 
-View(boletim_salto_sp$MODELO_URNA)
+# Removendo as urnas que não foram incluídas na análise
+boletim_salto_sp_amostra <- as.data.frame(boletim_salto_sp[rowSums(is.na(boletim_salto_sp)) == 0,])
+table(boletim_salto_sp_amostra$HASH_IDENTIFICACAO)
+
+# Conferindo Numero de Votos entre o Boletim vs Logs 
+
+colnames(boletim_salto_sp_amostra)
+
+boletim_salto_sp_amostra_resumido <- boletim_salto_sp_amostra %>% 
+  select(HASH_URNA, MODELO_URNA, DS_ELEICAO, DS_CARGO_PERGUNTA, DS_TIPO_VOTAVEL, NM_VOTAVEL, QT_VOTOS)
+
+View(boletim_salto_sp_amostra_resumido)
+
+## Boletim
+View(boletim_salto_sp_amostra)
 
 
