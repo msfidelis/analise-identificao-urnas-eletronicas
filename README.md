@@ -335,6 +335,18 @@ b8a1a140172867f6d0d3a07fa7e7310c
 
 O objetivo é utilizar os metadados que não mudam, e não se repetem inicialmente em hashes e gerar um novo identificador único para a urna de determinada seção eleitoral. 
 
+## Qual o motivo de eu ter escolhido uma estratégia de Hashing??
+
+Durante minha carreira eu já tive a oportunidade de auditar alguns sistemas grandes e distribuídos de diversos segmentos de mercado. 
+
+Essa técnica foi a primeira que me veio em mente pois me lembrou de episódios onde haviam diversos logs distribuidos e despadronizados, de softwares como Snort, pFSense, Nginx, Apaches, Aplicações e não existiam algum `trace-id` para fazer um trace de ponta a ponta para identificar algum vetor de ataque de segurança ou problema sistemico. 
+
+Dessa forma, a estratégia de hashing nos permite pegar dados que são comuns entre diversas fontes, e criar um `trace-id` para efetuarmos uma determinada análise ou responder alguma pergunta espeficifica de observabilidade para um ambiente em determinada situação. 
+
+Softwares de APM, muito conhecidos de mercado utilizam estratégias parecidas para quando não conseguem enviar ou receber um id de identificação de origem entre sistemas que se comunicam. 
+
+Dessa forma, achei muito viável utilizar a técnica de hashing de metadados para criar correlações entre urnas e documentos públicos. 
+
 ### Criando um Hashing Identificador para a Urna / Seção 
 
 Vamos gerar uma seed de caracteres concatenando informações como `municipio`, `zona_eleitoral`, `local_votacao`, `secao_eleitoral`, `modelo_urna`, `id_urna`. 
