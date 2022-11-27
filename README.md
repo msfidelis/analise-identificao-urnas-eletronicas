@@ -43,10 +43,10 @@ Esta prova de conceito foi construída com base no relatório preeliminar emitid
 
 Ambos o relatórios apresentam pontos de auditoria referentes aos modelos anteriores ao UE2022, contestando a falta de possibilidade de auditar e correlacinar dados. 
 
-> Arquivo digital Log de Urna: um prontuário digital que requer a autenticação em cada linha de
+> "Arquivo digital Log de Urna: um prontuário digital que requer a autenticação em cada linha de
 registro de atividade"
 
-> Cada urna eletrônica gera o seu respectivo arquivo digital LOG cuja razão fundamental de existir é
+> "Cada urna eletrônica gera o seu respectivo arquivo digital LOG cuja razão fundamental de existir é
 registrar, como num prontuário médico, em cada linha do arquivo, uma atividade realizada pela
 urna, naquele dado instante. Cada linha do LOG inclui duas informações essenciais e necessárias,
 para validação do registro, lidas diretamente do hardware:
