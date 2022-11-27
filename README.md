@@ -162,9 +162,9 @@ Os arquivos possuem 6 colunas. Contendo principalmente o `datetime` do log, o `l
 
 ![formato inicial](./img/formato-inicial.png)
 
-## Gerando uma tabela de frequencias dos Identificadores Iniciais
+## Gerando uma tabela de frequências dos Identificadores Iniciais
 
-Vamos gerar uma tabela de frequencias, para contar a ocorrencia de cada linha de log separando pelos id's de urna encontrados no campo `V3`.
+Vamos gerar uma tabela de frequências, para contar a ocorrência de cada linha de log separando pelos id's de urna encontrados no campo `V3`.
 
 ```r
 initial_table <- table(logs$vV)
@@ -173,12 +173,11 @@ initial_table
 
 ![tabela-de-frequencias-raw](./img/analise-inicial-freq-logs.png)
 
-Como foram importados dados de 20 urnas distintas, eram esperados logs agrupados de 20 identificadores, porém temos uma quantidade muito discrepante de logs a partir do Identificador `67305985`. Mesmo ID apontado no relatório. Por fim chegamos na linha de raciocinio do relatório. De 20 observações, 16 estão apresentando logs com o mesmo identificador. Dado esse ponto, é dito pela consultoria, em nome do Partido Liberal, que seria terminantemente impossível utilizar os logs para auditar as urnas e conferir informações. 
+Como foram importados dados de 20 urnas distintas, eram esperados logs agrupados de 20 identificadores, porém temos uma quantidade muito discrepante de logs a partir do Identificador `67305985`. Mesmo ID apontado no relatório. Por fim chegamos na linha de raciocínio do relatório. De 20 observações, 16 estão apresentando logs com o mesmo identificador. Dado esse ponto, é dito pela consultoria, em nome do Partido Liberal, que seria terminantemente impossível utilizar os logs para auditar as urnas e conferir informações. 
 
 O objetivo dessa análise é aplicar técnicas de mercado exploratórias para não só conseguir auditar e checar votos, como também enriquecer os dados além da informação bruta para análises estatísticas, aplicar modelos de Machine Learning e enriquecer ainda mais os datasets públicos e confiabilidade. 
 
-Veremos como nos passos a seguir. 
-
+Veremos como nos passos a seguir.
 
 # Simulação de Auditoria de Dados
 
@@ -186,19 +185,19 @@ A partir deste ponto, vou guiar a análise como se eu mesmo, assumindo um papel 
 
 ## Data Minning e Enriquecimento dos Dataframes
 
-Como os arquivos de logs são verbosos mas não possuem muitas observações em na dimensão de variáveis, a ideia inicial é percorrer superficialmente os dados gerados nas linhas de logs para ver que tipo de informações encontramos. 
+Como os arquivos de logs são verbosos, mas não possuem muitas observações em na dimensão de variáveis, a ideia inicial é percorrer superficialmente os dados gerados nas linhas de logs para ver que tipo de informações encontramos. 
 
-Usando um editor de texto, abrimos um dos arquivos da amostra, encontramos informações interessantes como `Modelo de Urna`, `Município`, `Zona Eleitoral`, S`eção Eleitoral`, `Local de Votação`
+Usando um editor de texto, abrimos um dos arquivos da amostra, encontramos informações interessantes como `Modelo de Urna`, `Município`, `Zona Eleitoral`, `Seção Eleitoral`, `Local de Votação`
 
 ![primeira analise](./img/primeira-analise.png)
 
-Para um check-up mais leigo, esses dados já serviriam. Pois o próprio Tribunal Supreno Eleitoral utiliza a sequencia de `Municipio`/`Zona`/`Seção` para se organizar e disponibilizar os dados no portal. 
+Para um check-up mais leigo, esses dados já serviriam. Pois, o próprio Tribunal Supremo Eleitoral utiliza a sequência de `Município`/`Zona`/`Seção` para se organizar e disponibilizar os dados no portal. 
 
 ![Busca TSE](./img/busca-tse.png)
 
 Vamos normalizar e enriquecer as linhas de log do Dataframe. 
 
-Para realizar essa ação, vamos utilizar o ferramental para aplicar Regex nas linhas de logs procurando por determinadas ocorrencias de padrão de texto, e recuperando os valores. 
+Para realizar essa ação, vamos utilizar o ferramental para aplicar Regex nas linhas de logs procurando por determinadas ocorrências de padrão de texto, e recuperando os valores. 
 
 Antes disso, vamos criar e renomear as variáveis do dataframe para uma melhor identificação visual e facilitar a manipulação dos dados. 
 
@@ -250,9 +249,9 @@ for (d in datasets_logs) {
 
 ```
 
-A partir desse ponto, já evoluimos nosso dataframe 
+A partir desse ponto, já evoluímos nosso dataframe 
 
-### A partir desse ponto, evoluimos o dataframe disso:
+### A partir desse ponto, evoluímos o dataframe disso:
 
 ![dataframe-antes](./img/formato-inicial.png)
 
@@ -262,14 +261,14 @@ A partir desse ponto, já evoluimos nosso dataframe
 ![dataframe-antes](./img/dataframe-regex.png)
 
 
-Portanto vamos explorar estatisticamente essa transformação para validarmos se está cobrindo o total de 20 observações de urnas. 
+Portanto, vamos explorar estatisticamente essa transformação para validarmos se está cobrindo o total de 20 observações de urnas. 
 
 Primeiramente vamos avaliar a quantidade de seções eleitorais. 
 
 
 #### Quantidade de Modelos
 
-Inicialmente conseguimos identificar a quantidade de modelos de urnas utilizados na amostra, totalizando 
+Inicialmente conseguimos identificar a quantidade de modelos de urnas utilizados na amostra, totalizando
 
 | Modelos   | Quantidade    | %     |
 |-----------|---------------|-------|
@@ -295,15 +294,15 @@ Por fim conseguimos pela primeira vez identificar 20 observações de 20 urnas a
 
 # Hashing de Identificação de Urnas através da metadados categóricos
 
-A partir do momento que coletamos dados minerados, podemos começar a pensar numa forma de gerar um identificador único para cada modelo de urna através de uma tecnica de [Hashing](https://pt.wikipedia.org/wiki/Função_hash) de metadados. 
+A partir do momento que coletamos dados minerados, podemos começar a pensar numa forma de gerar um identificador único para cada modelo de urna através de uma técnica de [Hashing](https://pt.wikipedia.org/wiki/Função_hash) de metadados. 
 
 Uma função hash é um algoritmo que mapeia dados de comprimento variável para dados de comprimento fixo. Os valores retornados por uma função hash são chamados valores hash, códigos hash, somas hash, checksums ou simplesmente hashes
 
-As técnica de Hashing é amplamente conhecida em diversas áreas e tem muitos usos dentro do universo de tecnologia e engenharia de software. Mas principalmente para garantir integridade de algum dado. O conceito de Hash para olhos mais leigos é: `transformar uma grande quantidade de dados, em uma pequena quantidade de informações`. 
+As técnicas de Hashing é amplamente conhecida em diversas áreas e tem muitos usos no universo de tecnologia e engenharia de software. Mas principalmente para garantir integridade de algum dado. O conceito de Hash para olhos mais leigos é: `transformar uma abundante quantidade de dados, em uma pequena quantidade de informações`. 
 
-Basicamente trocar um numero grande de caracteres, palavras, números por um hash correspondente aquele dados sem volta. Apenas sendo possível chegar ao resultado inicial através de `colisão`. 
+Basicamente trocar um número grande de caracteres, palavras, números por um hash correspondente aqueles dados sem volta. Apenas sendo possível chegar ao resultado inicial através de `colisão`. 
 
-Um exemplo prático, sem relação com a análise: 
+Um exemplo prático, sem relação com a análise:
 
 ```bash
 
@@ -339,9 +338,9 @@ O objetivo é utilizar os metadados que não mudam, e não se repetem inicialmen
 
 Durante minha carreira eu já tive a oportunidade de auditar alguns sistemas grandes e distribuídos de diversos segmentos de mercado. 
 
-Essa técnica foi a primeira que me veio em mente pois me lembrou de episódios onde haviam diversos logs distribuidos e despadronizados, de softwares como Snort, pFSense, Nginx, Apaches, Aplicações e não existiam algum `trace-id` para fazer um trace de ponta a ponta para identificar algum vetor de ataque de segurança ou problema sistemico. 
+Essa técnica foi a primeira que me veio em mente, pois me lembrou de episódios onde haviam diversos logs distribuídos e sem padrão, de softwares como Snort, pFSense, Nginx, Apaches, Aplicações e não existia algo parecido com um  `trace-id` para fazer uma identificação de ponta a ponta para seguir algum vetor de ataque de segurança, ou problema funcional. 
 
-Dessa forma, a estratégia de hashing nos permite pegar dados que são comuns entre diversas fontes, e criar um `trace-id` para efetuarmos uma determinada análise ou responder alguma pergunta espeficifica de observabilidade para um ambiente em determinada situação. 
+Dessa forma, a estratégia de hashing nos permite pegar dados que são comuns entre diversas fontes, e criar um `trace-id` para efetuarmos uma determinada análise ou responder alguma pergunta especifica de observabilidade para um ambiente em determinada situação. 
 
 Softwares de APM, muito conhecidos de mercado utilizam estratégias parecidas para quando não conseguem enviar ou receber um id de identificação de origem entre sistemas que se comunicam. 
 
@@ -351,8 +350,7 @@ Dessa forma, achei muito viável utilizar a técnica de hashing de metadados par
 
 Vamos gerar uma seed de caracteres concatenando informações como `municipio`, `zona_eleitoral`, `local_votacao`, `secao_eleitoral`, `modelo_urna`, `id_urna`. 
 
-dessa forma `MUNICIPIO-ZONA-LOCAL-SECAO-MODELO-ID`, tendo um resultado final parecido com `70050-0221-1015-0001-UE2020-2122186`, e logo depois criar um outro campo no nosso dataframe chamado `hash_urna`, onde vamos armazenar o nosso identificador único. Dessa forma conseguindo ver de qual urna """hasheada""", veio determinado log. Para relizar isso vamos usar a biblioteca `digest` do `R`. 
-
+dessa forma `MUNICIPIO-ZONA-LOCAL-SECAO-MODELO-ID`, tendo um resultado final parecido com `70050-0221-1015-0001-UE2020-2122186`, e logo depois criar outro campo no nosso dataframe chamado `hash_urna`, onde vamos armazenar o nosso identificador único. Dessa forma conseguindo ver de qual urna """hasheada""", veio determinado log. Para realizar isso vamos usar a biblioteca `digest` do `R`.
 
 ```r
 ## Gerando uma seed para vincular a auditoria das urnas
@@ -372,7 +370,7 @@ logs$hash_urna <- sapply(logs$urna_seed, digest, algo="md5")
 
 # Comparação da Auditoria via ID e Auditoria via Hashing de urnas
 
-Primeiramente vamos gerar a comparação com base no erro apontado do PL de não identificacão, se baseando no dado que chamamos de `id_urna`. Vamos gerar a tabela de frequencia dos logs baseados nesse valor
+Primeiramente vamos gerar a comparação com base no erro apontado do PL de não identificação, se baseando no dado que chamamos de `id_urna`. Vamos gerar a tabela de frequência dos logs baseados nesse valor
 
 ```r
 ## Tabela de frequencias id_urna
@@ -397,12 +395,12 @@ freq_table_hash
 
 ![Hash Urna](./img/hash-urna-sort.png)
 
-Dessa forma conseguimos chegar num identificador da urna em seu horário de atividade. Conseguimos identificar e trabalhar nos dados da mesma através do campo que substituimos com o `hash_urna`. 
+Dessa forma conseguimos chegar num identificador da urna em seu horário de atividade. Conseguimos identificar e trabalhar nos dados da mesma através do campo que substituímos com o `hash_urna`. 
 
 
 # Comparação da Auditoria via ID e Auditoria via Hashing dos modelos apontados como “problemáticos”
 
-A ideia deste tópico é realizar o mesmo teste de frequencia mas tendo como amostra somente os modelos anteriores anteriores ao `UE2022` cujo identificador foi dado como impecilho para validação dos dados. 
+A ideia deste tópico é realizar o mesmo teste de frequencia, mas tendo como amostra somente os modelos anteriores ao `UE2022` cujo identificador foi dado como empecilho para validação dos dados. 
 
 Primeiro passo é selecionar somente os modelos com o `id_urna` igual a `67305985`. 
 
@@ -412,7 +410,7 @@ codigo_urna_analise <- 67305985
 urnas_analise <- subset(logs, id_urna == codigo_urna_analise)
 ```
 
-Segundo passos é repetir o teste da tabela de frequencia para pegar as urnas "não identificáveis"
+Segundo passos é repetir o teste da tabela de frequência para pegar as urnas "não identificáveis"
 
 ```r 
 ### Tabela de frequencia do id_urna dos modelos antigos
@@ -441,7 +439,7 @@ freq_table_urnas_analise
 
 # GameDays de Auditoria - Sempre em Construção
 
-Essa seção é feita para validarmos o modelo de auditoria respondendo a perguntas que um auditor faria. A ideia não é usar apenas a tecnica de hashing, mas também vários modelos de Machine Learning para exploração dos dados. 
+Essa seção é feita para validarmos o modelo de auditoria respondendo a perguntas que um auditor faria. A ideia não é usar apenas a técnica de hashing, mas também vários modelos de Machine Learning para exploração dos dados. 
 
 -----
 
@@ -452,11 +450,12 @@ Um teste interessante é correlação entre o Boletim de Urna e a própria Urna.
 Os boletins são emitidos por estado. Sendo assim iremos realizar o teste com base no boletim do Segundo Turno de São Paulo.
 
 [Boletim das Urnas - SP - Boletim de Urna - Segundo turno - 31.10.2022
+
 ](https://dadosabertos.tse.jus.br/dataset/resultados-2022-boletim-de-urna/resource/5729e0c0-c756-4ecf-8556-d98340135428)
 
 
 
-Primeiro passo é importar o boletim, que veio em formato CSV diferente dos logs que são distribuídos em DAT. 
+Primeiro passo é importar o boletim, que veio em formato CSV diferente dos logs que são distribuídos em DAT.
 
 ```r
 boletim <- read.csv("bweb_2t_SP_311020221535/bweb_2t_SP_311020221535.csv", 
@@ -470,13 +469,13 @@ colnames(boletim)
 
 ![](./img/colnames-boletim.png)
 
-Durante a primeira análise podemos ver que o número de informações em forma de variáveis do boletim é bem maior que o dos logs de forma crua. Porém não temos informações como `codigo da urna`, `modelo da urna`. 
+Durante a primeira análise podemos ver que o número de informações em forma de variáveis do boletim é bem maior que o dos logs de forma crua. Porém, não temos informações como `codigo da urna`, `modelo da urna`. 
 
 Mas temos informações que podemos cruzar com o outro dataset dos logs, como `CD_MUNICIPIO`, `NR_ZONA`,  `NR_SECAO`, `NR_LOCAL_VOTACAO`
 
 ### Hashing do Boletim
 
-Antes de aplicarmos a tecnica de hashing, vamos efetuar alguns procedimentos para facilitar o cruzamento dos dados. A primeira dessas coisas será efetuar a normalização de alguns campos para que fiquem iguais aos que existem nos logs.
+Antes de aplicarmos a técnica de hashing, vamos efetuar alguns procedimentos para facilitar o cruzamento dos dados. A primeira dessas coisas será efetuar a normalização de alguns campos para ficarem iguais aos que existem nos logs.
 
 ```r
 # Normalizando o NR_ZONA com padding de 4 zeros
@@ -488,14 +487,14 @@ boletim$NR_SECAO_NORM <- sprintf("%04d",boletim$NR_SECAO)
 colnames(boletim)
 ```
 
-Em seguida vamos recuperar somente os boletins do Municipio isolado da amostra, sendo ele `70050` da cidade de Salto, São Paulo. 
+Em seguida recuperamos somente os boletins do Município isolado da amostra, sendo ele `70050` da cidade de Salto, São Paulo.
 
 ```r
 boletim_salto_sp <- subset(boletim, CD_MUNICIPIO == 70050)
 boletim_salto_sp
 ```
 
-Vamos aplicar a tecnica de hashing inicialmente no primeiro dataframe dos logs. Inicialmente criando uma seed e posteriormente gerar um hash `MD5` dela no campo `hash_identificacao_boletim`. Vamos utilizar somente as informações que existem no boletim.
+Vamos aplicar a técnica de hashing inicialmente no primeiro dataframe dos logs. Inicialmente criando uma seed e posteriormente gerar um hash `MD5` dela no campo `hash_identificacao_boletim`. Vamos utilizar somente as informações que existem no boletim.
 
 ```r
 logs$boletim_seed <- paste(
