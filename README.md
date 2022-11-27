@@ -1,4 +1,3 @@
-
 # Sumário
 
 * [Introdução](#introdução)
@@ -8,7 +7,7 @@
 * [Problema apresentado no relatório](#problema-apresentado-no-relatório)
 * [Encontrando o problema apresentado nas fontes de dados](#encontrando-o-problema-apresentado-nas-fontes-de-dados)
     * [Importando os Dados para Análise](#importando-os-dados)
-    * [Gerando uma tabela de frequencias dos Identificadores Iniciais](#gerando-uma-tabela-de-frequencias-dos-identificadores-iniciais)
+    * [Gerando uma tabela de frequências dos Identificadores Iniciais](#gerando-uma-tabela-de-frequencias-dos-identificadores-iniciais)
 * [Simulação e Auditoria de Dados](#simulação-de-auditoria-de-dados)
     * [Data Minning e Enriquecimento dos Dataframes](#data-minning-e-enriquecimento-dos-dataframes)
     * [Hashing de Identificação de Urnas através da metadados categóricos](#hashing-de-identificação-de-urnas-através-da-metadados-categóricos)
@@ -22,7 +21,7 @@
 
 # Introdução 
 
-A partir das constantes ações do **Partido Liberal (PL)**, liderado  atualmente por **Valdemar da Costa Neto**, para desqualificar o processo eleitoral e descredibilizar as instituições afim de garantir mais um mandato para seu candidato **Jair Messias Bolsonaro** por meios não democráticos, foram apresentados uma série de relatórios e discursos afim de alegar a **total impossibilidade** de auditoria das urnas cujos modelos são anteriores a 2020.
+A partir das constantes ações do **Partido Liberal (PL)**, liderado atualmente por **Valdemar da Costa Neto**, para desqualificar o processo eleitoral e descredibilizar as instituições, afim de garantir mais um mandato para seu candidato **Jair Messias Bolsonaro** por meios não democráticos, foram apresentados uma série de relatórios e discursos, afim de alegar a **total impossibilidade** de auditoria das urnas cujos modelos são anteriores a 2020.
 
 Será apresentado uma prova de conceito afim de criar um hash único de trabalho das urnas para identificá-las e diferenciá-las nas análises de logs para auditoria unitária ou em massa, e também correlacionar as mesmas em outros datasets e boletins públicos. 
 
@@ -33,58 +32,57 @@ Essa análise, proposta de auditoria e identificação de urnas, é feita inicia
 
 O Objetivo desta análise é exemplificar que é possível, sim, auditar todos os modelos de urnas eletrônicas sem a necessidade da identificação da mesma via log. 
 
-Serão apresentadas tecnicas e ferramentas de mercado, ferramentas de análise estatística e ciência de dados com exemplos práticos e com todos os scripts de análise e datasets públicos e abertos. 
+Serão apresentadas técnicas e ferramentas de mercado, ferramentas de análise estatística e ciência de dados com exemplos práticos e com todos os scripts de análise e datasets públicos e abertos. 
 
-Tanto quanto os dados, todas as ferramentas utilizadas são Open Source e estão disponíveis para para todos acessarem e utilizarem de forma livre. 
+Tanto quanto os dados, todas as ferramentas utilizadas são Open Source e estão disponíveis para todos acessarem e utilizarem de forma livre. 
 
 # Problema apresentado no relatório
 
-Esta prova de conceito foi construída com base no relatório preeliminar emitido pelo PL no dia 15/11/2022 e no relatório consolidado emitido dia 22/11/2022.
+Esta prova de conceito foi construída com base no relatório preliminar emitido pelo PL no dia 15/11/2022 e no relatório consolidado emitido dia 22/11/2022.
 
-Ambos o relatórios apresentam pontos de auditoria referentes aos modelos anteriores ao UE2022, contestando a falta de possibilidade de auditar e correlacinar dados. 
+Ambos o relatórios apresentam pontos de auditoria referentes aos modelos anteriores ao UE2022, contestando a falta de possibilidade de auditar e correlacionar dados. 
 
-> "Arquivo digital Log de Urna: um prontuário digital que requer a autenticação em cada linha de
+ "Arquivo digital Log de Urna: um prontuário digital que requer a autenticação em cada linha de
 registro de atividade"
 
-> "Cada urna eletrônica gera o seu respectivo arquivo digital LOG cuja razão fundamental de existir é
+ "Cada urna eletrônica gera o seu respectivo arquivo digital LOG cuja razão fundamental de existir é
 registrar, como num prontuário médico, em cada linha do arquivo, uma atividade realizada pela
 urna, naquele dado instante. Cada linha do LOG inclui duas informações essenciais e necessárias,
 para validação do registro, lidas diretamente do hardware:
-> * carimbo de tempo, composto por data e hora:minuto:segundo, lidos do relógio do
+ * carimbo de tempo, composto por data e hora:minuto:segundo, lidos do relógio do
 equipamento
-> * código de identificação da urna eletrônica, lido da memória permanente e indelével (ROM)
+ * código de identificação da urna eletrônica, lido da memória permanente e indelével (ROM)
 do equipamento"
 
 
 
-O objetivo do relatório claramente não é gerar uma investigação para que o Tribunal Superior Eleitoral (TSE) possa responder tecnicamente, e apresentar alternativas para a possibilidade de auditoria e correlação através de fallbacks sistêmicos. Pois no proprio documento preeliminar, é clara a intenção do Partido Liberal (PL) de invalidar os votos dos cidadãos que exerceram seu papel democrático de escolha de representantes públicos, afim de eleger o eventual candidato de seu partido, Jair Messias Bolsonaro. 
+O objetivo do relatório claramente não é gerar uma investigação para que o Tribunal Superior Eleitoral (TSE) possa responder tecnicamente, e apresentar alternativas para a possibilidade de auditoria e correlação através de fallbacks sistêmicos. Pois, no próprio documento preliminar, é clara a intenção do Partido Liberal (PL) de invalidar os votos dos cidadãos que exerceram seu papel democrático de escolha de representantes públicos, afim de eleger o eventual candidato de seu partido, Jair Messias Bolsonaro. 
 
->  "A partir disso, conclui que "os votos válidos e auditáveis do segundo turno" atestariam
+"A partir disso, conclui que "os votos válidos e auditáveis do segundo turno" atestariam
 resultado diferente e dariam 51,05% dos votos a Bolsonaro. O documento indica que as
 urnas 2020 seriam as únicas que teriam "elementos de auditoria válida e que atestam a
 autenticidade do resultado eleitoral com a certeza necessária – na concepção do próprio
 Tribunal Superior Eleitoral"
 
-> "Nesta perspectiva técnica, não é possível validar os resultados gerados em todas as urnas
+ "Nesta perspectiva técnica, não é possível validar os resultados gerados em todas as urnas
 eletrônicas de modelos 2009, 2010, 2011, 2013 e 2015, resultados estes que deveriam ser
 desconsiderados na totalização das eleições no segundo turno, em função do mau
-funcionamento desta urnas.
+funcionamento destas urnas.
 
-> Nada mais havendo a considerar damos por encerrado este relatório"
+ Nada mais havendo a considerar damos por encerrado este relatório"
 
 ### Referências
 
 [Relatório Técnico Preliminar - Logs Inválidos das Urnas Eletrônicas - Fiscalização das Eleições de 2022 no TSE - por Partido Liberal (PL) - 15/11/2022](https://cdn.oantagonista.com/uploads/2022/11/PL-Relatorio-Tecnico-Logs-Invalidos-das-Urnas-Eletronicas-v0.7-15-11-2022.pdf)
 
-[Adendo ao Relatório Técnico Mau Funcionamento das Urnas Eletrônicas  - Fiscalização das Eleições de 2022 no TSE - por Partido Liberal (PL) - 23/11/2022](https://cdn.oantagonista.com/uploads/2022/11/PL-Adendo-ao-Relatorio-Tecnico-sobre-o-Mau-Funcionamento-das-Urnas-Eletronicas-v1.5-22-11-2022.pdf)
-
+[Adendo ao Relatório Técnico Mau Funcionamento das Urnas Eletrônicas - Fiscalização das Eleições de 2022 no TSE - por Partido Liberal (PL) - 23/11/2022](https://cdn.oantagonista.com/uploads/2022/11/PL-Adendo-ao-Relatorio-Tecnico-sobre-o-Mau-Funcionamento-das-Urnas-Eletronicas-v1.5-22-11-2022.pdf)
 
 
 # Dados Utilizados
 
 Para a realização das análises vamos utilizar as mesmas fontes de dados utilizadas no relatório do PL. Embora numa condição menor em termos de amostras por conta de limitações de hardware. 
 
-Serão analisadas 20 Urnas eletronicas da cidade de Salto - São Paulo, sendo 16 delas anteriores ao modelo EU2022
+Serão analisadas 20 Urnas eletrônicas da cidade de Salto - São Paulo, sendo 16 delas anteriores ao modelo EU2022
 
 ### Referências dos Dados
 
@@ -98,11 +96,11 @@ Serão analisadas 20 Urnas eletronicas da cidade de Salto - São Paulo, sendo 16
 
 Para iniciarmos a análise vamos tentar chegar na mesma conclusão que os analistas contratados pelo PL chegaram no relatório preliminar. Encontrar o campo que foi apontado como problemático. 
 
-Realizei o Download de logs de 20 urnas usadas em 20 seções eleitorais da cidade de Salto, São Paulo. Cidade na qual resido. Codigo Municipio 70050.
+Realizei o Download de logs de 20 urnas usadas em 20 seções eleitorais da cidade de Salto, São Paulo. Cidade na qual resido. Código Município 70050.
 
-Os arquivo estão na [extensão .dat](https://www.reviversoft.com/pt/file-extensions/dat). Arquivos em texto simples que estavam separando as variáveis das observações a partir da tabs. 
+Os arquivos estão na [extensão .dat](https://www.reviversoft.com/pt/file-extensions/dat). Arquivos em texto simples que estavam separando as variáveis das observações a partir da tabs. 
 
-Feita a primeira análise a olho nú, precisei identificar o chartset para fazer a futura análise com a devida qualidade. O mesmo se encontrava em charset [iso-8859-1](https://pt.wikipedia.org/wiki/ISO/IEC_8859-1). 
+Feita a primeira análise a olho nu, precisei identificar o chartset para fazer a futura análise com a devida qualidade. O mesmo se encontrava em charset [iso-8859-1](https://pt.wikipedia.org/wiki/ISO/IEC_8859-1). 
 
 
 ![charset](./img/charset.png)
@@ -110,9 +108,9 @@ Feita a primeira análise a olho nú, precisei identificar o chartset para fazer
 
 ## Importando os Dados
 
-Para executar a análise vou estar utilizando o ferramental da [linguagem R](https://rlang.r-lib.org), linguagem normalmente utilizada para realizar tarfas de Estatística, Machine Learning, e Data Science. 
+Para executar a análise vou estar utilizando o ferramental da [linguagem R](https://rlang.r-lib.org), linguagem normalmente utilizada para realizar tarefas de Estatística, Machine Learning, e Data Science. 
 
-O primeiro passo foi juntar todos os datasets reunidos das urnas em um unico dataframe para ajudar na manipulação e análise. 
+O primeiro passo foi juntar todos os datasets reunidos das urnas em um único dataframe para ajudar na manipulação e análise.
 
 ```r
 datasets_logs <- c(
