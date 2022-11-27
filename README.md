@@ -22,7 +22,7 @@
 
 # Introdução 
 
-A partir das constantes ações do **Partido Livre (PL)**, liderado  atualmente por **Valdemar da Costa Neto**, para desqualificar o processo eleitoral e descredibilizar as instituições afim de garantir mais um mandato para seu candidato **Jair Messias Bolsonaro** por meios não democráticos, foram apresentados uma série de relatórios e discursos afim de alegar a **total impossibilidade** de auditoria das urnas cujos modelos são anteriores a 2020.
+A partir das constantes ações do **Partido Liberal (PL)**, liderado  atualmente por **Valdemar da Costa Neto**, para desqualificar o processo eleitoral e descredibilizar as instituições afim de garantir mais um mandato para seu candidato **Jair Messias Bolsonaro** por meios não democráticos, foram apresentados uma série de relatórios e discursos afim de alegar a **total impossibilidade** de auditoria das urnas cujos modelos são anteriores a 2020.
 
 Será apresentado uma prova de conceito afim de criar um hash único de trabalho das urnas para identificá-las e diferenciá-las nas análises de logs para auditoria unitária ou em massa, e também correlacionar as mesmas em outros datasets e boletins públicos. 
 
@@ -57,7 +57,7 @@ do equipamento"
 
 
 
-O objetivo do relatório claramente não é gerar uma investigação para que o Supremo Tribunal Eleitoral (STE) possa responder tecnicamente, e apresentar alternativas para a possibilidade de auditoria e correlação através de fallbacks sistêmicos. Pois no proprio documento preeliminar, é clara a intenção do Partido Liberal (PL) de invalidar os votos dos cidadãos que exerceram seu papel democrático de escolha de representantes públicos, afim de eleger o eventual candidato de seu partido, Jair Messias Bolsonaro. 
+O objetivo do relatório claramente não é gerar uma investigação para que o Tribunal Superior Eleitoral (TSE) possa responder tecnicamente, e apresentar alternativas para a possibilidade de auditoria e correlação através de fallbacks sistêmicos. Pois no proprio documento preeliminar, é clara a intenção do Partido Liberal (PL) de invalidar os votos dos cidadãos que exerceram seu papel democrático de escolha de representantes públicos, afim de eleger o eventual candidato de seu partido, Jair Messias Bolsonaro. 
 
 >  "A partir disso, conclui que "os votos válidos e auditáveis do segundo turno" atestariam
 resultado diferente e dariam 51,05% dos votos a Bolsonaro. O documento indica que as
