@@ -25,8 +25,12 @@ A partir das constantes ações do **Partido Liberal (PL)**, liderado atualmente
 
 Será apresentado uma prova de conceito afim de criar um hash único de trabalho das urnas para identificá-las e diferenciá-las nas análises de logs para auditoria unitária ou em massa, e também correlacionar as mesmas em outros datasets e boletins públicos. 
 
+-----
+
 ## IMPORTANTE
 Essa análise, proposta de auditoria e identificação de urnas, é feita inicialmente por um civil, por vontade própria, livre que qualquer financiamento de qualquer grupo ou partido político. Afim de estabelecer modelos técnicos para auditoria de dados e resultados eleitorais de forma otimizada e segura. 
+
+-----
 
 # Objetivo
 
@@ -35,6 +39,8 @@ O Objetivo desta análise é exemplificar que é possível, sim, auditar todos o
 Serão apresentadas técnicas e ferramentas de mercado, ferramentas de análise estatística e ciência de dados com exemplos práticos e com todos os scripts de análise e datasets públicos e abertos. 
 
 Tanto quanto os dados, todas as ferramentas utilizadas são Open Source e estão disponíveis para todos acessarem e utilizarem de forma livre. 
+
+-----
 
 # Problema apresentado no relatório
 
@@ -53,8 +59,6 @@ para validação do registro, lidas diretamente do hardware:
 equipamento
  * código de identificação da urna eletrônica, lido da memória permanente e indelével (ROM)
 do equipamento"
-
-
 
 O objetivo do relatório claramente não é gerar uma investigação para que o Tribunal Superior Eleitoral (TSE) possa responder tecnicamente, e apresentar alternativas para a possibilidade de auditoria e correlação através de fallbacks sistêmicos. Pois, no próprio documento preliminar, é clara a intenção do Partido Liberal (PL) de invalidar os votos dos cidadãos que exerceram seu papel democrático de escolha de representantes públicos, afim de eleger o eventual candidato de seu partido, Jair Messias Bolsonaro. 
 
@@ -77,7 +81,7 @@ funcionamento destas urnas.
 
 [Adendo ao Relatório Técnico Mau Funcionamento das Urnas Eletrônicas - Fiscalização das Eleições de 2022 no TSE - por Partido Liberal (PL) - 23/11/2022](https://cdn.oantagonista.com/uploads/2022/11/PL-Adendo-ao-Relatorio-Tecnico-sobre-o-Mau-Funcionamento-das-Urnas-Eletronicas-v1.5-22-11-2022.pdf)
 
-
+-----
 # Dados Utilizados
 
 Para a realização das análises vamos utilizar as mesmas fontes de dados utilizadas no relatório do PL. Embora numa condição menor em termos de amostras por conta de limitações de hardware. 
@@ -90,8 +94,7 @@ Serão analisadas 20 Urnas eletrônicas da cidade de Salto - São Paulo, sendo 1
 
 [Boletim das Urnas - Dados Abertos](https://dadosabertos.tse.jus.br/dataset/resultados-2022-boletim-de-urna)
 
-
-
+-----
 # Encontrando o problema apresentado nas fontes de dados
 
 Para iniciarmos a análise vamos tentar chegar na mesma conclusão que os analistas contratados pelo PL chegaram no relatório preliminar. Encontrar o campo que foi apontado como problemático. 
@@ -179,6 +182,7 @@ O objetivo dessa análise é aplicar técnicas de mercado exploratórias para n�
 
 Veremos como nos passos a seguir.
 
+-----
 # Simulação de Auditoria de Dados
 
 A partir deste ponto, vou guiar a análise como se eu mesmo, assumindo um papel de auditor ou cientista de dados, precisasse estabelecer formas de gerar informação útil com a massa de dados para análises em escala. 
@@ -291,7 +295,7 @@ Por fim conseguimos pela primeira vez identificar 20 observações de 20 urnas a
 
 ![](./img/secao-eleitoral-logs.png)
 
-
+-----
 # Hashing de Identificação de Urnas através da metadados categóricos
 
 A partir do momento que coletamos dados minerados, podemos começar a pensar numa forma de gerar um identificador único para cada modelo de urna através de uma técnica de [Hashing](https://pt.wikipedia.org/wiki/Função_hash) de metadados. 
@@ -397,7 +401,7 @@ freq_table_hash
 
 Dessa forma conseguimos chegar num identificador da urna em seu horário de atividade. Conseguimos identificar e trabalhar nos dados da mesma através do campo que substituímos com o `hash_urna`. 
 
-
+-----
 # Comparação da Auditoria via ID e Auditoria via Hashing dos modelos apontados como “problemáticos”
 
 A ideia deste tópico é realizar o mesmo teste de frequencia, mas tendo como amostra somente os modelos anteriores ao `UE2022` cujo identificador foi dado como empecilho para validação dos dados. 
@@ -437,6 +441,7 @@ freq_table_urnas_analise
 
 ![Logs Hash Antigos](./img/logs-antigos-hash.png)
 
+-----
 # GameDays de Auditoria - Sempre em Construção
 
 Essa seção é feita para validarmos o modelo de auditoria respondendo a perguntas que um auditor faria. A ideia não é usar apenas a técnica de hashing, mas também vários modelos de Machine Learning para exploração dos dados. 
