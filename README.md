@@ -27,13 +27,13 @@ A partir das constantes ações do **Partido Liberal (PL)**, liderado  atualment
 Será apresentado uma prova de conceito afim de criar um hash único de trabalho das urnas para identificá-las e diferenciá-las nas análises de logs para auditoria unitária ou em massa, e também correlacionar as mesmas em outros datasets e boletins públicos. 
 
 ## IMPORTANTE
-Essa análise, proposta de auditoria e identificação de urnas, é feita inicialmente por um civil, por vontade própria, livre que qualquer financiamento de qualquer grupo ou partido político. Afins de estabelecer modelos técnicos para auditoria de dados e resultados eleitorais de forma otimizada e segura. 
+Essa análise, proposta de auditoria e identificação de urnas, é feita inicialmente por um civil, por vontade própria, livre que qualquer financiamento de qualquer grupo ou partido político. Afim de estabelecer modelos técnicos para auditoria de dados e resultados eleitorais de forma otimizada e segura. 
 
 # Objetivo
 
 O Objetivo desta análise é exemplificar que é possível, sim, auditar todos os modelos de urnas eletrônicas sem a necessidade da identificação da mesma via log. 
 
-Serão apresentadas tecnicas e ferramentas de mercado, ferramentas de análise estatística e ciência da dados com exemplos praticos e com todos os scripts de análise e datasets públicos e abertos. 
+Serão apresentadas tecnicas e ferramentas de mercado, ferramentas de análise estatística e ciência de dados com exemplos práticos e com todos os scripts de análise e datasets públicos e abertos. 
 
 Tanto quanto os dados, todas as ferramentas utilizadas são Open Source e estão disponíveis para para todos acessarem e utilizarem de forma livre. 
 
